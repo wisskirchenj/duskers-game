@@ -25,7 +25,8 @@ class TestMenu(unittest.TestCase):
     @patch('sys.stdout', new_callable=StringIO)
     def test_user_invalid_input_loops(self, mock_stdout: StringIO, mock_input: MagicMock):
         mock_input.side_effect = ['0', '1']
-        menu_actions = {'1': lambda: print('Action 1'), '2': lambda: print('Action 2')}
+        menu_actions = {'1': lambda: print('Action 1'),
+                        '2': lambda: print('Action 2')}
         menu = Menu('Choose an action:', menu_actions, leave_menu_key='2')
         menu.run_once()
         self.assertEqual(mock_stdout.getvalue(), 'Choose an action:\nInvalid input\n\nChoose an action:\nAction 1\n')
@@ -37,5 +38,5 @@ class TestMenu(unittest.TestCase):
         menu_actions = {'1': lambda: print('Action 1'), '2': lambda: print('Action 2')}
         menu = Menu('Choose an action:', menu_actions, leave_menu_key='2')
         menu.loop()
-        self.assertEqual(mock_stdout.getvalue(), 'Choose an action:\nAction 1\nChoose an action:\nAction 1\nChoose an action:\nAction 2\n')
-
+        self.assertEqual(mock_stdout.getvalue(),
+                         'Choose an action:\nAction 1\nChoose an action:\nAction 1\nChoose an action:\nAction 2\n')
