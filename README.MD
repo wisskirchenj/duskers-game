@@ -30,4 +30,4 @@ Have fun!
 
 [//]: # (Project was completed on 25.09.23)
 
-30.09.23 Project started 
+30.09.23 Project started and Stage 1 completed - welcome and menu for starting, exiting the game
