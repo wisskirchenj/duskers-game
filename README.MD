@@ -31,3 +31,5 @@ Have fun!
 [//]: # (Project was completed on 25.09.23)
 
 30.09.23 Project started and Stage 1 completed - welcome and menu for starting, exiting the game
+
+30.09.23 Stage 2 completed - more menu structure, help, high scores added, improved `menu.py`

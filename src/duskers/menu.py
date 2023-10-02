@@ -1,30 +1,34 @@
 from typing import Callable
 
+LOOP = 0
+UP = 1
+EXIT = 2
+PROMPT = 'Your command:'
+
 
 class Menu:
-    def __init__(self, text: str, menu_actions: dict[str, Callable],
-                 invalid_message: str = 'Invalid input\n', case_sensitive: bool = False,
-                 leave_menu_key: str = None):
+    def __init__(self, text: str, menu_actions: dict[str, Callable[[], int]], invalid_message: str = 'Invalid input\n',
+                 case_sensitive: bool = False):
         self.text = text
         self.menu_actions = menu_actions
         self.invalid_message = invalid_message
         self.case_sensitive = case_sensitive
-        self.leave_menu_key = leave_menu_key
 
-    def run_once(self) -> str:
+    def run_once(self) -> int:
+        print(self.text)
         choice = self.get_menu_input()
         while choice not in self.menu_actions:
             print(self.invalid_message)
             choice = self.get_menu_input()
-        self.menu_actions[choice]()
-        return choice
+        return self.menu_actions[choice]()
 
-    def loop(self):
-        choice = self.run_once()
-        while choice != self.leave_menu_key:
-            choice = self.run_once()
+    def loop(self) -> int:
+        status = self.run_once()
+        while status == LOOP:
+            status = self.run_once()
+        return EXIT if status == EXIT else LOOP
 
     def get_menu_input(self):
-        print(self.text)
+        print(PROMPT)
         user_input = input()
         return user_input if self.case_sensitive else user_input.lower()

@@ -1,47 +1,72 @@
-from duskers.menu import Menu
+from duskers.menu import Menu, EXIT, LOOP, UP
 
-MAIN_MENU = '''[Play]
-[Exit]
-'''
-ASCII_ART = '''+=======================================================================+
+MAIN_MENU = '''+=======================================================================+
   ######*   ##*   ##*  #######*  ##*  ##*  #######*  ######*   #######*
   ##*  ##*  ##*   ##*  ##*       ##* ##*   ##*       ##*  ##*  ##*
   ##*  ##*  ##*   ##*  #######*  #####*    #####*    ######*   #######*
   ##*  ##*  ##*   ##*       ##*  ##* ##*   ##*       ##*  ##*       ##*
   ######*    ######*   #######*  ##*  ##*  #######*  ##*  ##*  #######*
                       (Survival ASCII Strategy Game)
-+=======================================================================+'''
-BEGIN = '''Are you ready to begin?
-    [Yes] [No]
++=======================================================================+
+
+[Play]
+[High] Scores
+[Help]
+[Exit]
 '''
+BEGIN = '''Are you ready to begin?
+[Yes] [No] Return to Main[Menu]
+'''
+HIGH = '''No scores to display.
+        [Back]
+'''
+STARTED = '''__________(LOG)__________________________________________________(LOG)__________
++==============================================================================+
 
 
-def start():
-    print("Great, now let's go code some more ;)")
+                                 (ROBOT IMAGES)
 
 
-def start_later():
++==============================================================================+
+|                  [Ex]plore                          [Up]grade                |
+|                  [Save]                             [M]enu                   |
++==============================================================================+'''
+
+
+def start() -> int:
+    print(STARTED)
+    return EXIT
+
+
+def start_later() -> int:
     print("How about now.")
-    print(BEGIN)
+    return LOOP
 
 
-def play():
+def play() -> int:
     print('Enter your name:')
     name = input()
     print(f'\nGreetings, commander {name}!')
-    print(BEGIN)
-    Menu('Your command:', {"yes": start, "no": start_later}, leave_menu_key="yes").loop()
+    return Menu(BEGIN, {"yes": start, "no": start_later, "menu": lambda: UP}).loop()
 
 
-def exit_game():
+def high() -> int:
+    return Menu(HIGH, {"back": lambda: LOOP}).run_once()
+
+
+def help_() -> int:
+    print('Coming SOON! Thanks for playing!')
+    return EXIT
+
+
+def exit_() -> int:
     print('Thanks for playing, bye!')
+    return EXIT
 
 
-def welcome():
-    print(ASCII_ART)
-    print(MAIN_MENU)
-    Menu('Your command:', {"play": play, "exit": exit_game}).run_once()
+def main_menu():
+    Menu(MAIN_MENU, {"play": play, "high": high, "help": help_, "exit": exit_}).loop()
 
 
 if __name__ == '__main__':
-    welcome()
+    main_menu()
