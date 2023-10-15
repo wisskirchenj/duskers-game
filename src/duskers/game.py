@@ -1,4 +1,5 @@
-from duskers.menu import Menu, EXIT, LOOP, UP
+from duskers.menu import Menu, LOOP, UP
+from duskers.play import Play, coming_soon, exit_
 
 MAIN_MENU = '''+=======================================================================+
   ######*   ##*   ##*  #######*  ##*  ##*  #######*  ######*   #######*
@@ -20,22 +21,10 @@ BEGIN = '''Are you ready to begin?
 HIGH = '''No scores to display.
         [Back]
 '''
-STARTED = '''__________(LOG)__________________________________________________(LOG)__________
-+==============================================================================+
-
-
-                                 (ROBOT IMAGES)
-
-
-+==============================================================================+
-|                  [Ex]plore                          [Up]grade                |
-|                  [Save]                             [M]enu                   |
-+==============================================================================+'''
 
 
 def start() -> int:
-    print(STARTED)
-    return EXIT
+    return Play().run()
 
 
 def start_later() -> int:
@@ -54,18 +43,8 @@ def high() -> int:
     return Menu(HIGH, {"back": lambda: LOOP}).run_once()
 
 
-def help_() -> int:
-    print('Coming SOON! Thanks for playing!')
-    return EXIT
-
-
-def exit_() -> int:
-    print('Thanks for playing, bye!')
-    return EXIT
-
-
 def main_menu():
-    Menu(MAIN_MENU, {"play": play, "high": high, "help": help_, "exit": exit_}).loop()
+    Menu(MAIN_MENU, {"play": play, "high": high, "help": coming_soon, "exit": exit_}).loop()
 
 
 if __name__ == '__main__':

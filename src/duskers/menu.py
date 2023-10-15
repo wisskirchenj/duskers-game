@@ -2,7 +2,8 @@ from typing import Callable
 
 LOOP = 0
 UP = 1
-EXIT = 2
+TWO_UP = 2
+EXIT = 3
 PROMPT = 'Your command:'
 
 
@@ -26,7 +27,7 @@ class Menu:
         status = self.run_once()
         while status == LOOP:
             status = self.run_once()
-        return EXIT if status == EXIT else LOOP
+        return EXIT if status == EXIT else status - 1
 
     def get_menu_input(self):
         print(PROMPT)

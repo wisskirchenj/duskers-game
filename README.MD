@@ -33,3 +33,5 @@ Have fun!
 30.09.23 Project started and Stage 1 completed - welcome and menu for starting, exiting the game
 
 30.09.23 Stage 2 completed - more menu structure, help, high scores added, improved `menu.py`
+
+14.10.23 Stage 3 completed - structure game related stuff into `play.py`, use setup of stage 2 and improve on it.
