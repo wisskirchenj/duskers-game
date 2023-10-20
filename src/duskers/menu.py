@@ -4,7 +4,7 @@ LOOP = 0
 UP = 1
 TWO_UP = 2
 EXIT = 3
-PROMPT = 'Your command:'
+PROMPT = 'Your command: '
 
 
 class Menu:
@@ -30,6 +30,5 @@ class Menu:
         return EXIT if status == EXIT else status - 1
 
     def get_menu_input(self):
-        print(PROMPT)
-        user_input = input()
+        user_input = input(PROMPT)
         return user_input if self.case_sensitive else user_input.lower()

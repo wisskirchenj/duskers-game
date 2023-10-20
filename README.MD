@@ -5,7 +5,7 @@ Purpose of doing this project is to make progress in this track and improve my P
 
 ## Technology / External Libraries
 
-- Python 3.11.5,
+- Python 3.11.6,
 - with packages: unittest, unittest.mock, parameterized
 
 ## Repository Contents
@@ -16,7 +16,7 @@ The sources of main project tasks (6 stages) and pytest testing.
 
 Install the wheel file using pip after clone/fork:
 
-    > pip install dist/duskers-game-3.11.5-py3-none-any.whl
+    > pip install dist/duskers-game-3.11.6-py3-none-any.whl
 
 ## Program description
 
@@ -35,3 +35,6 @@ Have fun!
 30.09.23 Stage 2 completed - more menu structure, help, high scores added, improved `menu.py`
 
 14.10.23 Stage 3 completed - structure game related stuff into `play.py`, use setup of stage 2 and improve on it.
+
+20.10.23 Stage 4 completed - new modules `pseudo_random.py`, `animation.py` and `explorer.py` to implement explore 
+functionality based on random choices. Also use argparse with defaults and positional arguments for parameters (`nargs=?`).

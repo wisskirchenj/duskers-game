@@ -18,7 +18,7 @@ class TestMenu(unittest.TestCase):
         self.assertEqual(menu.invalid_message, 'Invalid input\n')
         self.assertEqual(menu.case_sensitive, False)
         menu.run_once()
-        self.assertEqual(mock_stdout.getvalue(), '\nYour command:\nAction 1\n')
+        self.assertEqual(mock_stdout.getvalue(), '\nAction 1\n')
 
     @patch('builtins.input')
     @patch('sys.stdout', new_callable=StringIO)
@@ -28,14 +28,14 @@ class TestMenu(unittest.TestCase):
                         '2': lambda: print('Action 2') or EXIT}
         menu = Menu('', menu_actions)
         menu.run_once()
-        self.assertEqual(mock_stdout.getvalue(), '\nYour command:\nInvalid input\n\nYour command:\nAction 1\n')
+        self.assertEqual(mock_stdout.getvalue(), '\nInvalid input\n\nAction 1\n')
 
     @patch('builtins.input')
     @patch('sys.stdout', new_callable=StringIO)
     def test_user_loops_until_leave_key(self, mock_stdout: StringIO, mock_input: MagicMock):
         mock_input.side_effect = ['1', '1', '2']
-        menu_actions = {'1': lambda: print('Action 1') or LOOP, '2': lambda: print('Action 2') or EXIT}
+        menu_actions = {'1': lambda: print('Action 1') or LOOP,
+                        '2': lambda: print('Action 2') or EXIT}
         menu = Menu('', menu_actions)
         menu.loop()
-        self.assertEqual(mock_stdout.getvalue(),
-                         '\nYour command:\nAction 1\n\nYour command:\nAction 1\n\nYour command:\nAction 2\n')
+        self.assertEqual(mock_stdout.getvalue(), '\nAction 1\n\nAction 1\n\nAction 2\n')
