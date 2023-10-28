@@ -1,71 +1,64 @@
-import argparse
-import random
-from argparse import ArgumentParser
-
 from duskers.animation import Animation
-from duskers.menu import Menu, LOOP, UP
-from duskers.play import Play, coming_soon, exit_
+from duskers.explorer import Explorer
+from duskers.menu import Menu, EXIT, LOOP, TWO_UP, UP
+from duskers.state_manager import StateManager
 
-MAIN_MENU = '''+=======================================================================+
-  ######*   ##*   ##*  #######*  ##*  ##*  #######*  ######*   #######*
-  ##*  ##*  ##*   ##*  ##*       ##* ##*   ##*       ##*  ##*  ##*
-  ##*  ##*  ##*   ##*  #######*  #####*    #####*    ######*   #######*
-  ##*  ##*  ##*   ##*       ##*  ##* ##*   ##*       ##*  ##*       ##*
-  ######*    ######*   #######*  ##*  ##*  #######*  ##*  ##*  #######*
-                      (Survival ASCII Strategy Game)
-+=======================================================================+
-
-[Play]
-[High] Scores
-[Help]
-[Exit]
-'''
-BEGIN = '''Are you ready to begin?
-[Yes] [No] Return to Main[Menu]
-'''
-HIGH = '''No scores to display.
-        [Back]
-'''
+MENU = '''                          |==========================|
+                          |            MENU          |
+                          |                          |
+                          | [Back] to game           |
+                          | Return to [Main] Menu    |
+                          | [Save] and exit          |
+                          | [Exit] game              |
+                          |==========================|'''
+STARTED = '''+==============================================================================+
+  $   $$$$$$$   $  |  $   $$$$$$$   $  |  $   $$$$$$$   $
+  $$$$$     $$$$$  |  $$$$$     $$$$$  |  $$$$$     $$$$$
+      $$$$$$$      |      $$$$$$$      |      $$$$$$$
+     $$$   $$$     |     $$$   $$$     |     $$$   $$$
+     $       $     |     $       $     |     $       $
++==============================================================================+
+| Titanium: {0:<67}|
++==============================================================================+
+|                  [Ex]plore                          [Up]grade                |
+|                  [Save]                             [M]enu                   |
++==============================================================================+'''
 
 
 class Game:
 
-    def __init__(self):
-        args = self.parse_commandline_arguments()
-        random.seed(args.seed)
-        self.animation = Animation(args.min, args.max)
-        self.locations = args.locations.replace('_', ' ').split(',')
+    def __init__(self, animation: Animation, locations: list[str], player: str, titanium=0):
+        self.animation = animation
+        self.locations = locations
+        self.player = player
+        self.titanium = titanium
+
+    def run(self) -> int:
+        result = LOOP
+        while result < UP:
+            result = Menu(STARTED.format(self.titanium), {"ex": self.explore, "up": coming_soon,
+                                                          "save": self.save, "m": self.menu}).run_once()
+        return EXIT if result == EXIT else result - 1
 
     @staticmethod
-    def parse_commandline_arguments() -> argparse.Namespace:
-        parser = ArgumentParser(description='Duskers game')
-        parser.add_argument('seed', help='random seed', nargs='?', default=None)
-        parser.add_argument('min', help='lower limit for animation duration', nargs='?', type=int, default=1)
-        parser.add_argument('max', help='upper limit for animation duration', nargs='?', type=int, default=3)
-        parser.add_argument('locations', help='locations to search for titanium', nargs='?',
-                            default='Nuclear_power_plant_wreckage,Old_beach_bar')
-        return parser.parse_args()
+    def menu() -> int:
+        return Menu(MENU, {"back": lambda: LOOP, "main": lambda: TWO_UP,
+                           "save": coming_soon, "exit": exit_}).run_once()
 
-    def start(self) -> int:
-        return Play(self.animation, self.locations).run()
-
-    @staticmethod
-    def start_later() -> int:
-        print("How about now.")
+    def save(self) -> int:
+        StateManager(self.player, self.titanium).save()
         return LOOP
 
-    def play(self) -> int:
-        name = input('Enter your name: ')
-        print(f'\nGreetings, commander {name}!')
-        return Menu(BEGIN, {"yes": self.start, "no": self.start_later, "menu": lambda: UP}).loop()
-
-    @staticmethod
-    def high() -> int:
-        return Menu(HIGH, {"back": lambda: LOOP}).run_once()
-
-    def main_menu(self):
-        Menu(MAIN_MENU, {"play": self.play, "high": self.high, "help": coming_soon, "exit": exit_}).loop()
+    def explore(self) -> int:
+        self.titanium += Explorer(self.animation, self.locations).explore()
+        return LOOP
 
 
-if __name__ == '__main__':
-    Game().main_menu()
+def coming_soon() -> int:
+    print('Coming SOON! Thanks for playing!')
+    return EXIT
+
+
+def exit_() -> int:
+    print('Thanks for playing, bye!')
+    return EXIT

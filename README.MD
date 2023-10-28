@@ -6,7 +6,7 @@ Purpose of doing this project is to make progress in this track and improve my P
 ## Technology / External Libraries
 
 - Python 3.11.6,
-- with packages: unittest, unittest.mock, parameterized
+- with packages: jsonpickle, time, datetime, typing, argparse, os, random, unittest, unittest.mock, parameterized
 
 ## Repository Contents
 
@@ -38,3 +38,6 @@ Have fun!
 
 20.10.23 Stage 4 completed - new modules `pseudo_random.py`, `animation.py` and `explorer.py` to implement explore 
 functionality based on random choices. Also use argparse with defaults and positional arguments for parameters (`nargs=?`).
+
+28.10.23 Stage 5 completed - new modules `state.py`, `state_manager.py` to implement load and save of game states, using
+jsonpickle to (de-)serialize custom classes.
