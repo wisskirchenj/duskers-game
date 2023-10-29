@@ -4,7 +4,8 @@ from argparse import ArgumentParser
 
 from duskers.animation import Animation
 from duskers.menu import Menu, LOOP, UP, EXIT
-from duskers.game import Game, coming_soon, exit_
+from duskers.game import Game, exit_
+from duskers.score_manager import ScoreManager
 from duskers.state_manager import StateManager
 
 MAIN_MENU = '''+=======================================================================+
@@ -25,7 +26,7 @@ MAIN_MENU = '''+================================================================
 BEGIN = '''Are you ready to begin?
 [Yes] [No] Return to Main[Menu]
 '''
-HIGH = '''No scores to display.
+HIGH = '''
         [Back]
 '''
 
@@ -43,8 +44,8 @@ class GameControl:
     def parse_commandline_arguments() -> argparse.Namespace:
         parser = ArgumentParser(description='Duskers game')
         parser.add_argument('seed', help='random seed', nargs='?', default=None)
-        parser.add_argument('min', help='lower limit for animation duration', nargs='?', type=int, default=1)
-        parser.add_argument('max', help='upper limit for animation duration', nargs='?', type=int, default=3)
+        parser.add_argument('min', help='lower limit for animation duration', nargs='?', type=int, default=0)
+        parser.add_argument('max', help='upper limit for animation duration', nargs='?', type=int, default=0)
         parser.add_argument('locations', help='locations to search for titanium', nargs='?',
                             default='Nuclear_power_plant_wreckage,Old_beach_bar')
         return parser.parse_args()
@@ -67,16 +68,25 @@ class GameControl:
         if state:
             self.player = state.player
             print(f'Welcome back, commander {self.player}!')
-            return EXIT if Game(self.animation, self.locations, self.player, state.titanium).run() == EXIT else LOOP
+            return EXIT if Game(self.animation, self.locations, self.player, state.titanium, state.robots,
+                                state.upgrades).run() == EXIT else LOOP
         return LOOP
 
     @staticmethod
     def high() -> int:
+        ScoreManager().show_scores()
         return Menu(HIGH, {"back": lambda: LOOP}).run_once()
+
+    @staticmethod
+    def help() -> int:
+        print("This is Dusker's game. The menu is self-explanatory. "
+              "Explore is used to search for titanium our currency."
+              "\nWith upgrade you can buy more insight on found titanium and encounter probabilities.")
+        return LOOP
 
     def main_menu(self):
         Menu(MAIN_MENU, {"new": self.new_game, "load": self.load_game, "high": self.high,
-                         "help": coming_soon, "exit": exit_}).loop()
+                         "help": self.help, "exit": exit_}).loop()
 
 
 if __name__ == '__main__':

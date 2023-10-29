@@ -2,24 +2,23 @@ import random
 
 from duskers.animation import Animation
 
-EXPLORED = '''{0} explored successfully, with no damage taken.
-Acquired {1} lumps of titanium'''
-
 
 class Explorer:
 
-    def __init__(self, animation: Animation, locations: list[str]):
+    def __init__(self, animation: Animation, locations: list[str], upgrades: str, robots: int):
         self.animation = animation
         self.locations = locations
-        self.locations_to_explore: list[tuple[str, int]] = []
+        self.upgrades = upgrades
+        self.robots = robots
+        self.locations_to_explore: list[tuple[str, int, float]] = []
 
-    def explore(self) -> int:
+    def explore(self) -> (int, bool):
         self.locations_to_explore.clear()
         locations_amount = random.randint(1, 9)
         self.do_new_search()
         return self.explore_loop(locations_amount)
 
-    def explore_loop(self, locations_amount: int) -> int:
+    def explore_loop(self, locations_amount: int) -> (int, bool):
         searched_amount = 1
         while True:
             choice = input('Your command: ').lower()
@@ -31,7 +30,7 @@ class Explorer:
                 break
             else:
                 print('Invalid input')
-        return 0
+        return 0, False
 
     def search(self, locations_amount, searched_amount):
         if searched_amount < locations_amount:
@@ -43,13 +42,30 @@ class Explorer:
 
     def do_new_search(self):
         self.animation.animate_text("Searching")
-        self.locations_to_explore.append((random.choice(self.locations), random.randint(10, 100)))
+        location, titanium = random.choice(self.locations), random.randint(10, 100)
+        encounter_rate = random.random()
+        self.locations_to_explore.append((location, titanium, encounter_rate))
         for (i, tup) in enumerate(self.locations_to_explore):
-            print(f'[{i + 1}] {tup[0]}')
+            print(self.get_location_info(i, tup[:3]))
         print('\n[S] to continue searching\n')
 
-    def deploy(self, choice: str):
-        location, titanium = self.locations_to_explore[int(choice) - 1]
+    def deploy(self, choice: str) -> (int, bool):
+        location, titanium, encounter_rate = self.locations_to_explore[int(choice) - 1]
+        encounter = random.random() < encounter_rate
         self.animation.animate_text("Deploying robots")
-        print(EXPLORED.format(location, titanium))
-        return titanium
+        if encounter:
+            if self.robots == 1:
+                return 0, True
+            print('Enemy encounter')
+        print(f'{location} explored successfully,', '1 robot lost..' if encounter else 'with no damage taken.')
+        print(f'Acquired {titanium} lumps of titanium')
+        return titanium, encounter
+
+    def get_location_info(self, i: int, tup: tuple[str, int, float]) -> str:
+        location, titanium, encounter_rate = tup
+        location_info = f'[{i + 1}] {location}'
+        if 'T' in self.upgrades:
+            location_info += f' Titanium: {titanium}'
+        if 'E' in self.upgrades:
+            location_info += f' Encounter rate: {round(encounter_rate * 100)}%'
+        return location_info

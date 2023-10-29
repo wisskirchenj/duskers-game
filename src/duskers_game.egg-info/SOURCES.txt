@@ -7,9 +7,11 @@ src/duskers/animation.py
 src/duskers/explorer.py
 src/duskers/game.py
 src/duskers/game_control.py
+src/duskers/high_scores.json
 src/duskers/menu.py
 src/duskers/pseudo_random.py
 src/duskers/save_file.json
+src/duskers/score_manager.py
 src/duskers/state.py
 src/duskers/state_manager.py
 src/duskers/__pycache__/__init__.cpython-311.pyc
@@ -23,6 +25,7 @@ src/duskers/__pycache__/menu.cpython-311.pyc
 src/duskers/__pycache__/menu.cpython-312.pyc
 src/duskers/__pycache__/pseudo_random.cpython-311.pyc
 src/duskers/__pycache__/pseudo_random.cpython-312.pyc
+src/duskers/__pycache__/score_manager.cpython-311.pyc
 src/duskers/__pycache__/state.cpython-311.pyc
 src/duskers/__pycache__/state_manager.cpython-311.pyc
 src/duskers_game.egg-info/PKG-INFO

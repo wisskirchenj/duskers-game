@@ -29,9 +29,11 @@ def load_states() -> dict[str, State]:
 
 class StateManager:
 
-    def __init__(self, player: str = '', titanium: int = 0):
+    def __init__(self, player: str = '', titanium: int = 0, robots: int = 3, upgrades: str = ''):
         self.player = player
         self.titanium = titanium
+        self.robots = robots
+        self.upgrades = upgrades
         self.states = load_states()
 
     def save(self):
@@ -39,7 +41,7 @@ class StateManager:
         while True:
             choice = input(slots_prompt).lower()
             if choice.isnumeric() and 1 <= int(choice) <= 3:
-                self.states[choice] = State(self.player, self.titanium,
+                self.states[choice] = State(self.player, self.titanium, self.robots, self.upgrades,
                                             datetime.now().isoformat(sep=' ', timespec='minutes'))
                 self.save_to_file()
                 break

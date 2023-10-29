@@ -28,7 +28,7 @@ Have fun!
 
 ## Project progress
 
-[//]: # (Project was completed on 25.09.23)
+Project was completed on 29.10.23
 
 30.09.23 Project started and Stage 1 completed - welcome and menu for starting, exiting the game
 
@@ -41,3 +41,6 @@ functionality based on random choices. Also use argparse with defaults and posit
 
 28.10.23 Stage 5 completed - new modules `state.py`, `state_manager.py` to implement load and save of game states, using
 jsonpickle to (de-)serialize custom classes.
+
+29.10.23 Final Stage 6 completed - new module `score_manager.py` to implement load and save of scores using
+jsonpickle. Added upgrades for display of titanium, encounters with enemies. Robot amount is now variable.
