@@ -16,7 +16,7 @@ class TestMenu(unittest.TestCase):
         self.assertEqual(menu.text, '')
         self.assertEqual(menu.menu_actions, menu_actions)
         self.assertEqual(menu.invalid_message, 'Invalid input\n')
-        self.assertEqual(menu.case_sensitive, False)
+        self.assertFalse(menu.case_sensitive)
         menu.run_once()
         self.assertEqual(mock_stdout.getvalue(), '\nAction 1\n')
 
